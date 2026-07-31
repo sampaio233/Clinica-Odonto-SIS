@@ -53,8 +53,8 @@
     text-transform:uppercase;
     color:var(--rosegold-dark);
   }
-  section{padding:96px 0;}
-  @media (max-width:780px){ section{padding:64px 0;} }
+  section{padding:72px 0;}
+  @media (max-width:780px){ section{padding:48px 0;} }
 
   .placeholder-note{
     display:inline-block; margin-top:14px; font-size:12.5px; font-style:italic;
@@ -114,30 +114,34 @@
   }
 
   /* ---------- Hero ---------- */
-  .hero{ padding:76px 0 90px; }
-  .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; }
+  .hero{ padding:52px 0 60px; }
+  .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:44px; align-items:center; }
   @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } .hero{padding-top:40px;} }
-  .hero h1{ font-size:clamp(38px,5.4vw,60px); line-height:1.04; margin:18px 0 22px; }
-  .hero p.lead{ font-size:18px; max-width:480px; margin-bottom:32px; }
+  .hero h1{ font-size:clamp(38px,5.4vw,60px); line-height:1.04; margin:14px 0 18px; }
+  .hero p.lead{ font-size:18px; max-width:480px; margin-bottom:24px; }
   .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; }
-  .trust-row{ display:flex; align-items:center; gap:22px; margin-top:38px; flex-wrap:wrap; }
+  .trust-row{ display:flex; align-items:center; gap:22px; margin-top:26px; flex-wrap:wrap; }
   .trust-item{ display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600; color:var(--ink-soft); }
   .trust-item svg{ width:17px; height:17px; color:var(--rosegold); }
 
   /* ---------- Hero animation ---------- */
-  .hero-visual{ display:flex; justify-content:center; }
+  .hero-visual{ display:flex; flex-direction:column; align-items:center; }
   .orb-frame{
-    position:relative; width:min(400px, 88vw); aspect-ratio:1/1; border-radius:50%;
+    position:relative; width:min(420px, 92vw); aspect-ratio:1/1.05; border-radius:32px;
     padding:8px;
     background:conic-gradient(from 200deg, var(--ig1), var(--ig2), var(--ig3), var(--ig1));
   }
   .orb-inner{
-    width:100%; height:100%; border-radius:50%;
+    width:100%; height:100%; border-radius:26px;
     background:radial-gradient(circle at 32% 26%, #fff 0%, var(--blush) 46%, #ecc9ba 100%);
     overflow:hidden; position:relative;
     box-shadow:inset 0 0 0 1px rgba(255,255,255,0.6);
   }
   .orb-inner svg{ width:100%; height:100%; display:block; }
+  .hero-photo{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    opacity:0; transition:opacity .3s ease;
+  }
 
   .shine{ transform-origin:150px 150px; animation:sweep 3.6s ease-in-out infinite; }
   @keyframes sweep{
@@ -162,7 +166,7 @@
   }
 
   /* ---------- Section headers ---------- */
-  .sec-head{ max-width:640px; margin-bottom:52px; }
+  .sec-head{ max-width:640px; margin-bottom:36px; }
   .sec-head h2{ font-size:clamp(28px,3.4vw,40px); margin-top:14px; }
   .center{ text-align:center; margin-left:auto; margin-right:auto; }
 
@@ -178,7 +182,7 @@
   .service-card p{ font-size:14.5px; }
 
   /* ---------- Benefícios (carrossel) ---------- */
-  .benef-card{ background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:56px 40px; max-width:640px; margin:0 auto; text-align:center; }
+  .benef-card{ background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:40px 32px; max-width:640px; margin:0 auto; text-align:center; }
   .benef-photo{
     width:96px; height:96px; border-radius:50%; margin:0 auto 24px; overflow:hidden;
     background:var(--cream-2); border:1px dashed var(--line); display:flex; align-items:center; justify-content:center;
@@ -187,7 +191,7 @@
   .benef-photo svg{ width:30px; height:30px; color:var(--rosegold-dark); }
   .benef-eyebrow{ font-family:'Fraunces',serif; font-style:italic; font-size:20px; margin-bottom:16px; color:var(--rosegold-dark); }
   .benef-text{ font-size:16px; color:var(--ink-soft); max-width:480px; margin:0 auto; }
-  .benef-dots{ display:flex; justify-content:center; gap:10px; margin-top:34px; }
+  .benef-dots{ display:flex; justify-content:center; gap:10px; margin-top:22px; }
   .benef-dots button{ width:9px; height:9px; border-radius:50%; border:none; background:var(--line); cursor:pointer; padding:0; }
   .benef-dots button.active{ background:var(--rosegold-dark); width:22px; border-radius:6px; transition:width .2s ease; }
 
@@ -249,7 +253,7 @@
   .specialties-list svg{ width:19px; height:19px; color:var(--rosegold-dark); flex-shrink:0; }
 
   /* ---------- Doctors ---------- */
-  .doctors{ display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:52px; }
+  .doctors{ display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:36px; }
   @media (max-width:780px){ .doctors{ grid-template-columns:1fr; } }
   .doc-card{
     background:#fff; border:1px solid var(--line); border-radius:var(--radius);
@@ -366,7 +370,7 @@
         <div class="orb-inner">
           <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <clipPath id="orbClip"><circle cx="150" cy="150" r="150"/></clipPath>
+              <clipPath id="orbClip"><rect x="0" y="0" width="300" height="300" rx="26"/></clipPath>
               <linearGradient id="toothGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="#FFFFFF"/>
                 <stop offset="100%" stop-color="#F3E6DC"/>
@@ -399,8 +403,10 @@
               <g class="spark s3"><path d="M212 150l2.5 6.5 6.5 2.5-6.5 2.5-2.5 6.5-2.5-6.5-6.5-2.5 6.5-2.5z" fill="#C9A15A"/></g>
             </g>
           </svg>
+          <img class="hero-photo" src="images/hero-dentista.jpg" alt="Equipe da Clínica Odonto SIS" onload="this.style.opacity=1" onerror="this.style.display='none'">
         </div>
       </div>
+      <span class="placeholder-note" style="margin-top:14px;">Odonto SIS.</span>
     </div>
   </div>
 </section>
@@ -484,7 +490,6 @@
       </div>
     </div>
     <p class="conv-note">Não encontrou seu convênio na lista? Fale com a gente pelo WhatsApp antes da consulta e confirmamos a cobertura.</p>
-    <span class="placeholder-note">podemos escrever sobre os convênios aqui.</span>
   </div>
 </section>
 
@@ -731,7 +736,3 @@ document.querySelectorAll('.faq-item').forEach(item=>{
     document.querySelectorAll('.faq-item.open').forEach(o=> o.classList.remove('open'));
     if(!wasOpen) item.classList.add('open');
   });
-});
-</script>
-</body>
-</html>
