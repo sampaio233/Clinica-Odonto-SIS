@@ -114,55 +114,57 @@
   }
 
   /* ---------- Hero ---------- */
-  .hero{ padding:52px 0 60px; }
-  .hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:44px; align-items:center; }
-  @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } .hero{padding-top:40px;} }
-  .hero h1{ font-size:clamp(38px,5.4vw,60px); line-height:1.04; margin:14px 0 18px; }
-  .hero p.lead{ font-size:18px; max-width:480px; margin-bottom:24px; }
+  .hero{
+    position:relative; min-height:min(88vh, 720px); display:flex; align-items:flex-end;
+    padding:0; overflow:hidden; margin-top:-1px;
+  }
+  .hero-bg{
+    position:absolute; inset:0; z-index:0;
+    background:linear-gradient(150deg, var(--blush) 0%, #ecc9ba 55%, var(--rosegold) 100%);
+  }
+  .hero-bg img{ width:100%; height:100%; object-fit:cover; object-position:center 30%; display:block; }
+  .hero-overlay{
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(28,22,20,.15) 0%, rgba(28,22,20,.2) 40%, rgba(20,16,14,.86) 100%);
+  }
+  .hero-content-wrap{ position:relative; z-index:1; width:100%; padding:120px 28px 64px; }
+  @media (max-width:780px){ .hero-content-wrap{ padding:96px 22px 52px; } }
+  .hero-content{ max-width:620px; }
+  .hero-content .eyebrow{ color:#F1C9B9; }
+  .hero-content h1{ color:#fff; font-size:clamp(36px,5.6vw,58px); line-height:1.05; margin:14px 0 18px; }
+  .hero-content p.lead{ color:rgba(255,255,255,.86); font-size:18px; max-width:480px; margin-bottom:26px; }
   .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; }
+  .hero-content .btn-ghost{ background:rgba(255,255,255,.1); color:#fff; border-color:rgba(255,255,255,.4); backdrop-filter:blur(6px); }
+  .hero-content .btn-ghost:hover{ background:rgba(255,255,255,.2); }
   .trust-row{ display:flex; align-items:center; gap:22px; margin-top:26px; flex-wrap:wrap; }
-  .trust-item{ display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600; color:var(--ink-soft); }
-  .trust-item svg{ width:17px; height:17px; color:var(--rosegold); }
+  .trust-item{ display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600; color:rgba(255,255,255,.85); }
+  .trust-item svg{ width:17px; height:17px; color:#fff; }
 
-  /* ---------- Hero animation ---------- */
-  .hero-visual{ display:flex; flex-direction:column; align-items:center; }
-  .orb-frame{
-    position:relative; width:min(420px, 92vw); aspect-ratio:1/1.05; border-radius:32px;
-    padding:8px;
-    background:conic-gradient(from 200deg, var(--ig1), var(--ig2), var(--ig3), var(--ig1));
+  /* ---------- Hero entrance animation ---------- */
+  .hero-anim{ opacity:0; transform:translateY(22px); animation:heroFadeUp .8s cubic-bezier(.2,.7,.2,1) forwards; }
+  @keyframes heroFadeUp{ to{ opacity:1; transform:translateY(0); } }
+  .hero-bg img{ opacity:0; animation:heroImgIn .9s ease forwards; }
+  @keyframes heroImgIn{ from{ opacity:0; } to{ opacity:1; } }
+  .scroll-cue{
+    position:absolute; left:50%; bottom:22px; z-index:1; transform:translateX(-50%);
+    width:26px; height:42px; border:2px solid rgba(255,255,255,.55); border-radius:20px;
+    display:flex; justify-content:center; padding-top:7px;
   }
-  .orb-inner{
-    width:100%; height:100%; border-radius:26px;
-    background:radial-gradient(circle at 32% 26%, #fff 0%, var(--blush) 46%, #ecc9ba 100%);
-    overflow:hidden; position:relative;
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.6);
-  }
-  .orb-inner svg{ width:100%; height:100%; display:block; }
-  .hero-photo{
-    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
-    opacity:0; transition:opacity .3s ease;
-  }
+  .scroll-cue span{ width:4px; height:8px; border-radius:3px; background:#fff; animation:scrollCue 1.8s ease-in-out infinite; }
+  @keyframes scrollCue{ 0%{ opacity:1; transform:translateY(0);} 70%{ opacity:0; transform:translateY(10px);} 100%{ opacity:0; } }
+  @media (max-width:600px){ .scroll-cue{ display:none; } }
 
-  .shine{ transform-origin:150px 150px; animation:sweep 3.6s ease-in-out infinite; }
-  @keyframes sweep{
-    0%,100%{ transform:translateX(-70px) rotate(-8deg); opacity:0; }
-    45%{ opacity:.85; }
-    55%{ transform:translateX(70px) rotate(-8deg); opacity:0; }
-  }
-  .mirror-arm{ transform-origin:118px 150px; animation:tend 2.8s ease-in-out infinite; }
-  @keyframes tend{
-    0%,100%{ transform:rotate(-5deg); }
-    50%{ transform:rotate(7deg); }
-  }
-  .spark{ animation:twinkle 2.2s ease-in-out infinite; transform-origin:center; }
-  .spark.s2{ animation-delay:.5s; }
-  .spark.s3{ animation-delay:1.05s; }
-  @keyframes twinkle{
-    0%,100%{ opacity:0; transform:scale(.5); }
-    50%{ opacity:1; transform:scale(1); }
-  }
+  /* ---------- Scroll reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.visible{ opacity:1; transform:translateY(0); }
+  .services-grid .reveal:nth-child(2), .conv-grid .reveal:nth-child(2), .gallery-grid .reveal:nth-child(2), .faq-list .reveal:nth-child(2), .doctors .reveal:nth-child(2){ transition-delay:.09s; }
+  .services-grid .reveal:nth-child(3), .conv-grid .reveal:nth-child(3), .gallery-grid .reveal:nth-child(3), .faq-list .reveal:nth-child(3){ transition-delay:.18s; }
+  .conv-grid .reveal:nth-child(4), .gallery-grid .reveal:nth-child(4), .faq-list .reveal:nth-child(4){ transition-delay:.27s; }
+  .gallery-grid .reveal:nth-child(5){ transition-delay:.36s; }
+  .gallery-grid .reveal:nth-child(6){ transition-delay:.45s; }
   @media (prefers-reduced-motion: reduce){
-    .shine,.mirror-arm,.spark{ animation:none !important; }
+    .reveal{ opacity:1 !important; transform:none !important; transition:none !important; }
+    .hero-anim, .hero-bg img{ animation:none !important; opacity:1 !important; transform:none !important; }
   }
 
   /* ---------- Section headers ---------- */
@@ -271,15 +273,38 @@
   .doc-card .btn{ align-self:flex-start; margin-top:8px; }
 
   /* ---------- Avaliações ---------- */
+  .reviews-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:stretch; }
+  @media (max-width:900px){ .reviews-grid{ grid-template-columns:1fr; } }
   .google-card{
     background:#fff; border:1px solid var(--line); border-radius:var(--radius);
-    padding:44px; max-width:520px; margin:0 auto; text-align:center;
+    padding:44px; margin:0 auto; text-align:center; display:flex; flex-direction:column; justify-content:center;
   }
   .stars{ display:flex; gap:4px; justify-content:center; }
   .stars svg{ width:22px; height:22px; color:var(--gold); }
   .g-score{ display:flex; align-items:baseline; gap:12px; margin:16px 0 8px; justify-content:center; }
   .g-score .num{ font-family:'Fraunces',serif; font-size:48px; }
   .g-count{ font-size:14px; color:var(--ink-soft); margin-bottom:26px; }
+  .shot-carousel{ position:relative; border-radius:var(--radius); overflow:hidden; background:#fff; border:1px solid var(--line); }
+  .shot-track{ display:flex; transition:transform .4s ease; }
+  .shot-slide{
+    flex:0 0 100%; min-height:280px; display:flex; align-items:center; justify-content:center;
+    padding:14px; background:#fff;
+  }
+  .shot-slide img{ width:100%; height:100%; max-height:320px; object-fit:contain; display:block; }
+  .shot-arrow{
+    position:absolute; top:50%; transform:translateY(-50%); z-index:2;
+    width:38px; height:38px; border-radius:50%; border:1px solid var(--line);
+    background:rgba(255,255,255,.92); backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition:background .15s ease;
+  }
+  .shot-arrow:hover{ background:#fff; }
+  .shot-arrow svg{ width:18px; height:18px; color:var(--ink); }
+  .shot-arrow.prev{ left:12px; }
+  .shot-arrow.next{ right:12px; }
+  .shot-dots{ display:flex; justify-content:center; gap:8px; padding:12px 0 16px; }
+  .shot-dots button{ width:7px; height:7px; border-radius:50%; border:none; background:var(--line); cursor:pointer; padding:0; }
+  .shot-dots button.active{ background:var(--rosegold-dark); width:18px; border-radius:6px; transition:width .2s ease; }
 
   /* ---------- Location ---------- */
   .loc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:stretch; }
@@ -323,6 +348,7 @@
       <a href="#convenios">Convênios</a>
       <a href="#sobre-nos">Sobre nós</a>
       <a href="#fotos">Fotos</a>
+      <a href="#trabalhos">Trabalho</a>
       <a href="#faq">FAQ</a>
       <a href="#avaliacoes">Avaliações</a>
       <a href="#local">Localização</a>
@@ -340,20 +366,24 @@
   </div>
 </header>
 
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <span class="eyebrow">Padre Eustáquio · Belo Horizonte</span>
-      <h1>Cuidado de perto,<br><span class="italic">sorriso&nbsp;de&nbsp;confiança.</span></h1>
-      <p class="lead">A Clínica Odonto SIS é conduzida pelas Dras. Vanessa Duarte e Danielle Santos, com atendimento particular e por convênio para toda a família.</p>
-      <div class="hero-ctas">
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <img src="images/hero-dentista.jpg" alt="Equipe da Clínica Odonto SIS" id="heroImg" onload="document.getElementById('heroFallbackNote').style.display='none'" onerror="this.style.display='none'; document.getElementById('heroFallbackNote').style.display='inline-block';">
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="wrap hero-content-wrap">
+    <div class="hero-content">
+      <span class="eyebrow hero-anim" style="animation-delay:.05s;">Padre Eustáquio · Belo Horizonte</span>
+      <h1 class="hero-anim" style="animation-delay:.15s;">Cuidado de perto,<br><span class="italic">sorriso&nbsp;de&nbsp;confiança.</span></h1>
+      <p class="lead hero-anim" style="animation-delay:.28s;">A Clínica Odonto SIS é conduzida pelas Dras. Vanessa Duarte e Danielle Santos, com atendimento particular e por convênio para toda a família.</p>
+      <div class="hero-ctas hero-anim" style="animation-delay:.4s;">
         <a class="btn btn-primary" id="btnAgendarHero" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11.7 11.7 0 0 0 12 0C5.4 0 .1 5.3.1 11.9c0 2.1.6 4.1 1.6 5.9L0 24l6.4-1.7a11.9 11.9 0 0 0 5.6 1.4h.1c6.5 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.1-3.5-8.3ZM12 21.4h-.1a9.9 9.9 0 0 1-5-1.4l-.4-.2-3.8 1 1-3.7-.2-.4a9.9 9.9 0 0 1-1.5-5.3C2 6.1 6.5 1.6 12 1.6c2.6 0 5.1 1 7 2.9a9.8 9.8 0 0 1 2.9 7c0 5.5-4.5 9.9-9.9 9.9Zm5.4-7.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.7-1-2.3-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4 0 1.4 1 2.8 1.2 3 .1.2 2 3 4.7 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.6-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.1-.3-.2-.6-.3Z"/></svg>
           Agendar no WhatsApp
         </a>
         <a class="btn btn-ghost" href="#avaliacoes">Ver avaliações</a>
       </div>
-      <div class="trust-row">
+      <div class="trust-row hero-anim" style="animation-delay:.52s;">
         <div class="trust-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="M6 10.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-5.5"/></svg>
           IPSM · ALMG · FUSEX
@@ -363,72 +393,30 @@
           Atendimento particular e convênio
         </div>
       </div>
-    </div>
-
-    <div class="hero-visual">
-      <div class="orb-frame">
-        <div class="orb-inner">
-          <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <clipPath id="orbClip"><rect x="0" y="0" width="300" height="300" rx="26"/></clipPath>
-              <linearGradient id="toothGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#FFFFFF"/>
-                <stop offset="100%" stop-color="#F3E6DC"/>
-              </linearGradient>
-            </defs>
-            <g clip-path="url(#orbClip)">
-              <ellipse cx="176" cy="238" rx="66" ry="14" fill="#E3C6B6" opacity="0.55"/>
-              <g>
-                <path d="M148 128c-14-14-40-10-46 10-4 14 2 26 6 40 4 15 4 34 14 34 8 0 8-16 14-16s6 16 14 16c9 0 9-19 13-33 3-11 15-13 17-28 3-19-13-33-32-23z" fill="url(#toothGrad)" stroke="#D8B9A8" stroke-width="2"/>
-                <clipPath id="toothClip">
-                  <path d="M148 128c-14-14-40-10-46 10-4 14 2 26 6 40 4 15 4 34 14 34 8 0 8-16 14-16s6 16 14 16c9 0 9-19 13-33 3-11 15-13 17-28 3-19-13-33-32-23z"/>
-                </clipPath>
-                <g clip-path="url(#toothClip)" class="shine">
-                  <rect x="90" y="100" width="18" height="120" fill="#ffffff" opacity="0.75" transform="skewX(-18)"/>
-                </g>
-              </g>
-              <g class="mirror-arm">
-                <path d="M46 232c0-30 18-46 40-46s40 16 40 46" fill="#8F5C48"/>
-                <path d="M66 190c6 8 34 8 40 0" stroke="#F3EBE1" stroke-width="4" fill="none" stroke-linecap="round"/>
-                <circle cx="86" cy="160" r="24" fill="#F1DCCB"/>
-                <path d="M62 150a24 24 0 0 1 48 0c-8-4-16-6-24-6s-16 2-24 6z" fill="#B97B63"/>
-                <circle cx="86" cy="141" r="4" fill="#E1573C"/>
-                <path d="M72 166c6 6 22 6 28 0" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round"/>
-                <path d="M108 176c14-2 26 4 30 10" stroke="#8F5C48" stroke-width="10" fill="none" stroke-linecap="round"/>
-                <circle cx="141" cy="188" r="8" fill="#E7ECEF" stroke="#B7C1C6" stroke-width="2"/>
-                <circle cx="141" cy="188" r="4.5" fill="#ffffff"/>
-              </g>
-              <g class="spark s1"><path d="M204 118l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#C9A15A"/></g>
-              <g class="spark s2"><path d="M186 100l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#C9A15A"/></g>
-              <g class="spark s3"><path d="M212 150l2.5 6.5 6.5 2.5-6.5 2.5-2.5 6.5-2.5-6.5-6.5-2.5 6.5-2.5z" fill="#C9A15A"/></g>
-            </g>
-          </svg>
-          <img class="hero-photo" src="images/hero-dentista.jpg" alt="Equipe da Clínica Odonto SIS" onload="this.style.opacity=1" onerror="this.style.display='none'">
-        </div>
-      </div>
-      <span class="placeholder-note" style="margin-top:14px;">Coloque uma foto real da clínica ou das Dras. em images/hero-dentista.jpg que ela substitui a ilustração automaticamente.</span>
+      <span class="placeholder-note" id="heroFallbackNote" style="display:none; margin-top:14px;">Coloque uma foto real da clínica ou das Dras. em images/hero-dentista.jpg que ela aparece aqui automaticamente.</span>
     </div>
   </div>
+  <div class="scroll-cue" aria-hidden="true"><span></span></div>
 </section>
 
 <section id="servicos">
   <div class="wrap">
-    <div class="sec-head center">
+    <div class="sec-head center reveal">
       <span class="eyebrow">Nossos serviços</span>
       <h2>Cuidado completo, em cada etapa</h2>
     </div>
     <div class="services-grid">
-      <div class="service-card">
+      <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
         <h3>Clínica geral</h3>
         <p>Consultas de rotina, diagnóstico e prevenção para manter sua saúde bucal em dia.</p>
       </div>
-      <div class="service-card">
+      <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2c-3 0-5 2-5 5 0 2 1 3 1 5 0 3-1 4-1 7 0 2 1.5 3 2.5 3S11 20.5 12 20.5 13.5 22 14.5 22 17 21 17 19c0-3-1-4-1-7 0-2 1-3 1-5 0-3-2-5-5-5Z"/></svg></div>
         <h3>Implantodontia</h3>
         <p>Planejamento cuidadoso e acompanhamento em todas as fases do tratamento de implantes.</p>
       </div>
-      <div class="service-card">
+      <div class="service-card reveal">
         <div class="service-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg></div>
         <h3>Mais especialidades</h3>
         <p>Em breve, detalhamos aqui as demais especialidades da clínica.</p>
@@ -440,11 +428,11 @@
 
 <section id="beneficios" style="background:var(--cream-2);">
   <div class="wrap">
-    <div class="sec-head center">
+    <div class="sec-head center reveal">
       <span class="eyebrow">Para quem é</span>
       <h2>Quem pode se beneficiar dos tratamentos?</h2>
     </div>
-    <div class="benef-card" id="benefCard">
+    <div class="benef-card reveal" id="benefCard">
       <div class="benef-photo"><img src="" alt=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></div>
       <p class="benef-eyebrow" id="benefLabel">Crianças e adolescentes</p>
       <p class="benef-text" id="benefText">O ideal é levar a criança ao dentista ainda cedo, para acompanhar o crescimento dos dentes e identificar qualquer necessidade de tratamento com antecedência.</p>
@@ -459,30 +447,30 @@
 
 <section id="convenios">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <span class="eyebrow">Convênios</span>
       <h2>Quais convênios atendemos?</h2>
     </div>
     <div class="conv-grid">
-      <div class="conv-card">
+      <div class="conv-card reveal">
         <div class="conv-logo">
           <img src="images/convenio-ipsm.png" alt="Logo IPSM" onerror="this.parentElement.innerHTML='<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot;><path d=&quot;m9 12 2 2 4-4&quot;/><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/></svg>'">
         </div>
         <span>IPSM</span>
       </div>
-      <div class="conv-card">
+      <div class="conv-card reveal">
         <div class="conv-logo">
           <img src="images/convenio-almg.png" alt="Logo ALMG" onerror="this.parentElement.innerHTML='<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot;><path d=&quot;m9 12 2 2 4-4&quot;/><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/></svg>'">
         </div>
         <span>ALMG</span>
       </div>
-      <div class="conv-card">
+      <div class="conv-card reveal">
         <div class="conv-logo">
           <img src="images/convenio-fusex.png" alt="Logo FUSEX" onerror="this.parentElement.innerHTML='<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot;><path d=&quot;m9 12 2 2 4-4&quot;/><circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/></svg>'">
         </div>
         <span>FUSEX</span>
       </div>
-      <div class="conv-card">
+      <div class="conv-card reveal">
         <div class="conv-logo">
           <img src="images/convenio-particular.png" alt="Atendimento particular" onerror="this.parentElement.innerHTML='<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.8&quot;><rect x=&quot;5&quot; y=&quot;11&quot; width=&quot;14&quot; height=&quot;10&quot; rx=&quot;2&quot;/><path d=&quot;M8 11V7a4 4 0 0 1 8 0v4&quot;/></svg>'">
         </div>
@@ -503,7 +491,7 @@
         <p>Hoje a clínica é conduzida pelas Dras. Vanessa Duarte e Danielle Santos, que dividem a rotina do consultório entre atendimentos particulares e por convênio, sempre com a mesma atenção aos detalhes que guiou a clínica desde o início.</p>
         <span class="placeholder-note">Texto de exemplo — me manda a história real (ano de fundação, o que motivou vocês a abrir a clínica, algum marco importante) que eu substituo por aqui.</span>
       </div>
-      <div class="specialties-card">
+      <div class="specialties-card reveal">
         <h3>Especialidades que atendemos</h3>
         <ul class="specialties-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg> Clínica geral</li>
@@ -514,7 +502,7 @@
     </div>
 
     <div class="doctors" id="dentistas">
-      <div class="doc-card">
+      <div class="doc-card reveal">
         <div class="doc-avatar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
         </div>
@@ -525,7 +513,7 @@
         <p>Especialidade e tempo de atuação a confirmar.</p>
         <a class="btn btn-ghost" data-wa data-msg="Olá! Gostaria de marcar uma consulta com a Dra. Vanessa Duarte." target="_blank" rel="noopener">Marcar com a Dra. Vanessa</a>
       </div>
-      <div class="doc-card">
+      <div class="doc-card reveal">
         <div class="doc-avatar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
         </div>
@@ -543,60 +531,78 @@
 
 <section id="fotos">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <span class="eyebrow">Conheça o espaço</span>
       <h2>Fotos da clínica</h2>
     </div>
     <div class="gallery-grid">
-      <div class="gallery-tile"><img src="images/clinica-1.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-1.jpg</span></div></div>
-      <div class="gallery-tile"><img src="images/clinica-2.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-2.jpg</span></div></div>
-      <div class="gallery-tile"><img src="images/clinica-3.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-3.jpg</span></div></div>
-      <div class="gallery-tile"><img src="images/clinica-4.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-4.jpg</span></div></div>
-      <div class="gallery-tile"><img src="images/clinica-5.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-5.jpg</span></div></div>
-      <div class="gallery-tile"><img src="images/clinica-6.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-6.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/clinica-1.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-1.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/clinica-2.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-2.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/clinica-3.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-3.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/clinica-4.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-4.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/clinica-5.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-5.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/clinica-6.jpg" alt="Foto da clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/clinica-6.jpg</span></div></div>
     </div>
     <span class="placeholder-note">Cada quadro carrega automaticamente de images/clinica-1.jpg até clinica-6.jpg. Basta colocar suas fotos com esses nomes na pasta — veja a explicação após o arquivo.</span>
   </div>
 </section>
 
-<section id="instagram" style="background:var(--cream-2);">
+<section id="trabalhos" style="background:var(--cream-2);">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Resultados</span>
+      <h2>Nosso trabalho</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-tile reveal"><img src="images/trabalho-1.jpg" alt="Trabalho realizado na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/trabalho-1.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/trabalho-2.jpg" alt="Trabalho realizado na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/trabalho-2.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/trabalho-3.jpg" alt="Trabalho realizado na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/trabalho-3.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/trabalho-4.jpg" alt="Trabalho realizado na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/trabalho-4.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/trabalho-5.jpg" alt="Trabalho realizado na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/trabalho-5.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/trabalho-6.jpg" alt="Trabalho realizado na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/trabalho-6.jpg</span></div></div>
+    </div>
+    <span class="placeholder-note">Coloque fotos do trabalho de vocês (antes/depois, sorrisos finalizados etc.) em images/trabalho-1.jpg até trabalho-6.jpg. Vale lembrar de ter autorização do paciente pra usar a foto no site.</span>
+  </div>
+</section>
+
+<section id="instagram">
   <div class="wrap">
     <div class="ig-head-row">
-      <div class="sec-head" style="margin-bottom:0;">
+      <div class="sec-head reveal" style="margin-bottom:0;">
         <span class="eyebrow">Dia a dia</span>
         <h2>Acompanhe no Instagram</h2>
       </div>
       <a class="btn btn-dark" href="https://www.instagram.com/clinicasis/" target="_blank" rel="noopener">Ver @clinicasis</a>
     </div>
     <div class="gallery-grid">
-      <div class="gallery-tile"><img src="images/instagram-1.jpg" alt="Atendimento na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg><span>images/instagram-1.jpg</span></div></div>
-      <div class="gallery-tile"><img src="images/instagram-2.jpg" alt="Atendimento na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg><span>images/instagram-2.jpg</span></div></div>
-      <div class="gallery-tile"><img src="images/instagram-3.jpg" alt="Atendimento na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg><span>images/instagram-3.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/instagram-1.jpg" alt="Atendimento na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg><span>images/instagram-1.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/instagram-2.jpg" alt="Atendimento na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg><span>images/instagram-2.jpg</span></div></div>
+      <div class="gallery-tile reveal"><img src="images/instagram-3.jpg" alt="Atendimento na clínica" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg><span>images/instagram-3.jpg</span></div></div>
     </div>
-    <span class="placeholder-note">Coloque suas fotos de atendimento na pasta images com os nomes instagram-1.jpg, instagram-2.jpg e instagram-3.jpg (pode ser .png também, é só avisar) que elas aparecem aqui automaticamente. Pode adicionar mais — copie um bloco "gallery-tile" e mude o número do nome do arquivo.</span>
+    <span class="placeholder-note"> Acompanhe nosso dia a dia nas redes sociais!</span>
   </div>
 </section>
 
 <section id="faq" style="background:var(--cream-2);">
   <div class="wrap">
-    <div class="sec-head center">
+    <div class="sec-head center reveal">
       <span class="eyebrow">Dúvidas frequentes</span>
       <h2>Perguntas frequentes</h2>
     </div>
     <div class="faq-list" id="faqList">
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <button class="faq-q">Com quantos anos posso levar meu filho ao dentista?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
         <div class="faq-a"><p>O ideal é levar a criança ainda cedo, para acompanhar o crescimento dos dentes e identificar qualquer necessidade de tratamento com antecedência. Fale com a gente pelo WhatsApp para indicarmos a melhor idade para o seu caso.</p></div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <button class="faq-q">Quais convênios vocês atendem?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
         <div class="faq-a"><p>Atendemos IPSM, ALMG e FUSEX, além de particular. Se o seu convênio não está na lista, chama a gente no WhatsApp que confirmamos a cobertura.</p></div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <button class="faq-q">Como faço para agendar uma consulta?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
         <div class="faq-a"><p>É só chamar a gente no WhatsApp pelo botão flutuante ou pelo (31) 98268-2962. Você pode marcar direto com a Dra. Vanessa ou com a Dra. Danielle.</p></div>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <button class="faq-q">Vocês atendem em caso de urgência?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
         <div class="faq-a"><p>Fale com a gente pelo WhatsApp descrevendo o que está sentindo — respondemos o quanto antes para orientar os próximos passos.</p></div>
       </div>
@@ -607,36 +613,52 @@
 
 <section id="avaliacoes">
   <div class="wrap">
-    <div class="sec-head center">
+    <div class="sec-head center reveal">
       <span class="eyebrow">Avaliações</span>
       <h2>O que dizem sobre a Odonto SIS</h2>
     </div>
-    <div class="google-card">
-      <span class="eyebrow" style="color:var(--ink-soft);">No Google</span>
-      <div class="g-score">
-        <span class="num">5,0</span>
-        <div class="stars">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+    <div class="reviews-grid">
+      <div class="google-card reveal">
+        <span class="eyebrow" style="color:var(--ink-soft);">No Google</span>
+        <div class="g-score">
+          <span class="num">5,0</span>
+          <div class="stars">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+          </div>
         </div>
+        <p class="g-count">Baseado nas avaliações do Google Perfil da Empresa.</p>
+        <a class="btn btn-dark" id="btnGoogleReview" target="_blank" rel="noopener">Avaliar no Google</a>
       </div>
-      <p class="g-count">Baseado nas avaliações do Google Perfil da Empresa.</p>
-      <a class="btn btn-dark" id="btnGoogleReview" target="_blank" rel="noopener">Avaliar no Google</a>
+      <div class="shot-carousel reveal">
+        <div class="shot-track" id="reviewTrack">
+          <div class="shot-slide"><img src="images/avaliacoes-google-1.jpg" alt="Print de avaliação 1" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/avaliacoes-google-1.jpg</span></div></div>
+          <div class="shot-slide"><img src="images/avaliacoes-google-2.jpg" alt="Print de avaliação 2" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/avaliacoes-google-2.jpg</span></div></div>
+          <div class="shot-slide"><img src="images/avaliacoes-google-3.jpg" alt="Print de avaliação 3" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/avaliacoes-google-3.jpg</span></div></div>
+          <div class="shot-slide"><img src="images/avaliacoes-google-4.jpg" alt="Print de avaliação 4" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/avaliacoes-google-4.jpg</span></div></div>
+          <div class="shot-slide"><img src="images/avaliacoes-google-5.jpg" alt="Print de avaliação 5" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/avaliacoes-google-5.jpg</span></div></div>
+          <div class="shot-slide"><img src="images/avaliacoes-google-6.jpg" alt="Print de avaliação 6" onerror="this.style.display='none'; this.parentElement.querySelector('.gallery-placeholder').style.display='flex';"><div class="gallery-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9a2 2 0 0 1 2-2h1.2a2 2 0 0 0 1.6-.8l.6-.8A2 2 0 0 1 10 4.6h4a2 2 0 0 1 1.6.8l.6.8a2 2 0 0 0 1.6.8H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><circle cx="12" cy="13" r="3.5"/></svg><span>images/avaliacoes-google-6.jpg</span></div></div>
+        </div>
+        <button class="shot-arrow prev" id="reviewPrev" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m15 6-6 6 6 6"/></svg></button>
+        <button class="shot-arrow next" id="reviewNext" aria-label="Próximo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m9 6 6 6-6 6"/></svg></button>
+        <div class="shot-dots" id="reviewDots"></div>
+      </div>
     </div>
+    <span class="placeholder-note">São 6 espaços prontos pra prints das avaliações — salve como images/avaliacoes-google-1.jpg até -6.jpg (o que faltar mostra um quadro reservado). Clique nas setas pra navegar entre eles.</span>
   </div>
 </section>
 
 <section id="local">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head reveal">
       <span class="eyebrow">Onde estamos</span>
       <h2>Padre Eustáquio, Belo Horizonte</h2>
     </div>
     <div class="loc-grid">
-      <div class="loc-card">
+      <div class="loc-card reveal">
         <div class="loc-row">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg>
           <div><strong>Endereço</strong><span>Rua Jandaia, 138 — Sala 5, Padre Eustáquio, Belo Horizonte - MG, 30720-170</span></div>
@@ -655,7 +677,7 @@
         </div>
         <a class="btn btn-primary" data-wa data-msg="Olá! Vim pelo site e gostaria de agendar uma consulta." target="_blank" rel="noopener" style="justify-content:center;">Falar no WhatsApp</a>
       </div>
-      <div class="map-embed">
+      <div class="map-embed reveal">
         <iframe title="Mapa Clínica Odonto SIS" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
           src="https://www.google.com/maps?q=Rua+Jandaia,+138+-+Padre+Eust%C3%A1quio,+Belo+Horizonte+-+MG,+30720-170&output=embed">
         </iframe>
@@ -676,6 +698,7 @@
         <a href="#convenios">Convênios</a>
         <a href="#sobre-nos">Sobre nós</a>
         <a href="#fotos">Fotos</a>
+        <a href="#trabalhos">Trabalho</a>
         <a href="#faq">FAQ</a>
         <a href="#avaliacoes">Avaliações</a>
         <a href="#local">Localização</a>
@@ -730,6 +753,46 @@ function resetBenefTimer(){ clearInterval(benefTimer); benefTimer = setInterval(
 renderBenef(0);
 
 /* ===================== FAQ ===================== */
+/* ===================== CARROSSEL DE PRINTS ===================== */
+(function(){
+  const track = document.getElementById('reviewTrack');
+  if(!track) return;
+  const slides = track.children;
+  const dotsWrap = document.getElementById('reviewDots');
+  let idx = 0;
+  for(let i=0;i<slides.length;i++){
+    const dot = document.createElement('button');
+    if(i===0) dot.classList.add('active');
+    dot.addEventListener('click', ()=>{ idx = i; update(); });
+    dotsWrap.appendChild(dot);
+  }
+  function update(){
+    track.style.transform = `translateX(-${idx * 100}%)`;
+    Array.from(dotsWrap.children).forEach((d,i)=> d.classList.toggle('active', i===idx));
+  }
+  document.getElementById('reviewPrev').addEventListener('click', ()=>{
+    idx = (idx - 1 + slides.length) % slides.length; update();
+  });
+  document.getElementById('reviewNext').addEventListener('click', ()=>{
+    idx = (idx + 1) % slides.length; update();
+  });
+})();
+
+/* ===================== SCROLL REVEAL ===================== */
+if('IntersectionObserver' in window){
+  const revealObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.14, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+} else {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+}
+
 document.querySelectorAll('.faq-item').forEach(item=>{
   item.querySelector('.faq-q').addEventListener('click', ()=>{
     const wasOpen = item.classList.contains('open');
